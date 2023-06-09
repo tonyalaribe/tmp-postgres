@@ -32,7 +32,7 @@ import           Data.Maybe
 import           Data.Monoid
 import           Data.Monoid.Generic
 import           Data.List
-import           Data.List.NonEmpty as NE
+import qualified Data.List.NonEmpty as NE
 import           Data.Traversable
 import qualified Database.PostgreSQL.Simple.Options as Client
 import           GHC.Generics (Generic)
