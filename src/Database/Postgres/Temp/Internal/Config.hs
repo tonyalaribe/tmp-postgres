@@ -32,6 +32,7 @@ import           Data.Maybe
 import           Data.Monoid
 import           Data.Monoid.Generic
 import           Data.List
+import           Data.List.NonEmpty as NE
 import           Data.Traversable
 import qualified Database.PostgreSQL.Simple.Options as Client
 import           GHC.Generics (Generic)
@@ -636,18 +637,19 @@ completeCopyDirectory theDataDirectory CopyDirectoryCommand {..} =
     }
 
 getInitDbVersion :: String
-getInitDbVersion = unsafePerformIO $ readProcessWithExitCode "initdb" ["--version"] "" >>= \case
-  (ExitSuccess, outputString, _) -> do
-    let
-      theLastPart = last $ words outputString
-      versionPart = takeWhile (\x -> isDigit x || x == '.' || x == '-') theLastPart
-      humanReadable = if last versionPart == '.'
-        then init versionPart
-        else versionPart
-    pure $ humanReadable <> take 8 (makeArgumentHash outputString)
+getInitDbVersion = "15"
+-- getInitDbVersion = unsafePerformIO $ readProcessWithExitCode "initdb" ["--version"] "" >>= \case
+--   (ExitSuccess, outputString, _) -> do
+--     let
+--       theLastPart = NE.last $ "15" :| words outputString
+--       versionPart = takeWhile (\x -> isDigit x || x == '.' || x == '-') theLastPart
+--       humanReadable = if last versionPart == '.'
+--         then init versionPart
+--         else versionPart
+--     pure $ humanReadable <> take 8 (makeArgumentHash outputString)
 
-  (startErrorExitCode, startErrorStdOut, startErrorStdErr) ->
-    throwIO InitDbFailed {..}
+--   (startErrorExitCode, startErrorStdOut, startErrorStdErr) ->
+--     throwIO InitDbFailed {..}
 {-# NOINLINE getInitDbVersion #-}
 
 makeCommandLine :: String -> CompleteProcessConfig -> String
